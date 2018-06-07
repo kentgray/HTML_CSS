@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--Cascading Style sheets are for formatting
+        p is a blcok element: these are always full width and there is a space between each block element
+    -->
+    <style>
+        body {
+            background-color: red;
+            color: white; 
+            font: bold 40px arial, verdana
+        }
+        p{background-color: blue;
+          color: black;
+          font: bold 28px arial, verdana
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1><b>My first web page</b></h1>
+    </center>
+    <p><b>
+    This is a paragraph.
+    Paragraphs are block elements.</b></p>
+
+    <input type="button" 
+           value="  Test  "
+           onclick="alert('HI!')"
+           style="color-rendering:inherit"
+           
+           />
+
+</body>
+</html>
