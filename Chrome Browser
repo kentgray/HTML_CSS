@@ -1,0 +1,50 @@
+
+<html>
+<head>
+
+    <title>
+       My first Web Page
+    </title>
+
+    <!--Style section is used for CSS-->
+    <!--Margin is outside the element, padding is inside the element within the content-->
+    <style> 
+        div {background-color:red; 
+             color: white; 
+             margin: 10px 20px 30px 40px;
+             padding: 50px;
+             font-size:x-large;
+             font: bold 50px monotype corsiva;
+             border: 5px solid blue;
+        }
+        p {font-size: xx-large}
+    </style>
+
+<script>
+        function test() {
+            alert("this is a test")
+            var el = document.getElementById("div1");
+            el.innerHTML += "<br>Document Object Model";
+        }
+        
+</script>
+</head>
+<body>
+    <!--Block Element takes the full width and separates from other content-->
+
+    <h1>This is Chrome</h1>
+    <b> Test </b>Test
+    <p>This is a paragraph</p>
+
+    <!--Div was created later due to limitations of paragraph block element-->
+    <div id = "div1">This is a div block</div>
+
+    <!--Inline elements will fit elements on the same line if they can fit-->
+    <h1>Input elements - these are inline </h1>
+    <input type="button" value="Test" 
+        onclick = "test()"/>
+    <input type="button" value="Test 2"/>
+    <input type="text" value="This is a textbox"/>
+
+</body>
+</html>
