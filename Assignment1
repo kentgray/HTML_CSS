@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>
+    Assignment No. 1
+    </title>
+    <style>
+
+    p {font-size: xx-large}
+    body { font: normal 20px sans-serif}
+    </style>
+
+    <script>
+        function process() {
+            var name = document.getElementById("name")
+            var age = document.getElementById("age")
+            var el = document.getElementById("output")
+            el.innerHTML = "Name:" + name.value + 
+                "<br>Age:" + age.value;
+
+   
+        }
+    </script>
+</head>
+
+<body>
+    <br/><br/><br/>
+    <center>
+    <div>       
+        Submit your information below<br />
+<!--tr = table row; td = table definition; th = table header-->
+
+        <table>
+        <tr>
+            <td>Name</td>
+            <td>
+                <input type="text" 
+                        id="name"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Age</td>
+            <td>
+                <input type="text"
+                        id="age" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" 
+                     value="Verify"
+                    onclick="process()"/>
+            </td>
+        </tr> 
+       </table>
+
+    </div>
+
+    <div id = "output">
+        
+
+    </div>
+
+
+ 
+</body>
+</html>
