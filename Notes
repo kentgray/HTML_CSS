@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>
+        Notes from 6/18/2008
+    </title>
+    <script>
+        "use strict";
+        // variables hold data
+        // variables defined outside of a function are global
+        // functions do porcessing or calculations
+        // they are also event handlers
+        // they always start with the word function
+        // use as few variables as possible
+
+        var x = "<h1>this is a global Variable</h1>";
+
+        function test(){
+            var el = document.getElementById("output");
+            var input = document.getElementById("text1");
+            el.innerHTML = x+input.value;
+        }
+    </script>
+</head>
+<body>
+<body onload="test()">
+    <input type="text" id="text1"/>
+    <input type="button" 
+            value = "Process"
+            onclick="test()"/>
+    <div id="output">
+        This is the output div
+    </div>
+</body>
+</html>
