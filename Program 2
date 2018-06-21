@@ -15,17 +15,14 @@
         if (ch == 102)
           return Number(args[number]).toFixed(index);
 
-        return args[number].toLocaleString("en-US",{
-             style: "currency",
-             currency: "USD",
-             minimumFractionDigits: n,
-             maximumFractionDigits: n
-           });
-
+        return args[number].toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: n,
+            maximumFractionDigits: n
+        });
       });
-
     };
-
 
     function createTable(str, sep) {
       if (sep===undefined) sep=',';
@@ -49,14 +46,31 @@
       return s + "</table>";
         }
 
+        var employees = "Name,Reg,OT,Total";
         function add() {
-            var output = document.getElementById("output");
             var name = document.getElementById('name').value;
             var wage = document.getElementById('wage').value;
             var hour = document.getElementById('hour').value;
-            output.innerHTML = name + ' ' + wage * hour;
 
+            // act like there is not ot but we still are going to do the variables
 
+            var reg = hour * wage;
+            var ot = 0;
+        
+            if (hour > 40) {
+                reg = 40 * wage;
+                ot = (hour - 40) * 1.5 * wage;
+            } else {
+                reg = 40 * wage;
+            }
+            var total = reg + ot;
+
+            employees += "\n" + name + ' , '
+                + reg + ' , ' + ot + ',%1,$' + total.toFixed(2);
+            
+            var output = document.getElementById("output");
+            output.innerHTML = "<big>Employees</big>" +
+                createTable(employees);
         }
 
         function init() {
@@ -67,22 +81,19 @@
                 '\nHours,<input type="text" id="hour"' +
                 '\n,<input type="button" value="Add" ' +
                 'onclick="add()"/>';
-
-                ;
             var input = document.getElementById("input");
-            input.innerHTML = "<h2>Enter Name, Wage & Hours</h2>" +
+            input.innerHTML = "<h2>Enter Name, Wage <br>& Hours</h2>" +
                 createTable(s);
 }
     </script>
-
     <style>
-          body {
+
+        body {
             background-color: #111;
             color: #ffc;
             font-family: sans-serif;
         }
     </style>
-
 
 </head>
 <body onload="init()">
@@ -97,6 +108,5 @@
         </tr>
     </table>
 </body>
-
 </html>
 @ KG Enterprises
