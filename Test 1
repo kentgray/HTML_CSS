@@ -1,0 +1,127 @@
+<html>
+<head>
+    <title>Test 1</title>
+
+
+    <script>
+
+    String.prototype.format = function () {
+      var args = arguments;
+      return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
+        if (arguments[2] === undefined)
+          return args[number] === undefined ? '{' + number + '}' : args[number]
+        ;
+        var ch = arguments[3].charCodeAt(0);
+        var n = Number(arguments[4]);
+        if (ch == 102)
+          return Number(args[number]).toFixed(index);
+
+        return args[number].toLocaleString("en-US",{
+             style: "currency",
+             currency: "USD",
+             minimumFractionDigits: n,
+             maximumFractionDigits: n
+           });
+
+      });
+
+    };
+
+
+    function createTable(str, sep) {
+      if (sep===undefined) sep=',';
+      var s = "<table>";
+      var data = str.split("\n");
+      var aligns = ['"center"', '"right"'];
+      for (var i = 0; i < data.length; i++) {
+        var data2 = data[i].split(sep);
+        s += "<tr>";
+        for (var j = 0; j < data2.length; j++) {
+          s += "<td";
+          if (data2[j].charAt(0) == '%') {
+            var ch = data2[j].charAt(1);
+            s += " align=" + aligns[ch];
+            j++;
+          }
+          s += ">" + data2[j] + "</td>";
+        }
+        s += "</tr>";
+      }
+      return s + "</table>";
+        }
+
+        var orders = "Toy,Quantity,Price,Total";
+        function calc() {
+ 
+            var toy = document.getElementById('toy').value;
+            var price = document.getElementById('price').value;
+            var quantity = document.getElementById('quantity').value;
+  
+            var total = price * quantity;
+           
+            if (quantity < 10) {
+                toy = "10 minimum";
+                quantity = 0;
+                price = 0;
+                total = 0;
+            }
+        
+            else if (quantity < 50) {
+            total = (quantity * price);
+            }
+            else if (quantity > 50) {
+            total = (50 * price + (quantity - 50) * 0.5 * price);
+            }
+
+            orders += "\n" + toy + ' ,%0,' + quantity 
+                + ",%0,"+price + ',%1,$' + total.toFixed(2);
+
+            var output = document.getElementById("output");
+            output.innerHTML = createTable(orders);
+        }
+
+        function init() {
+            var hdg = document.getElementById("hdg");
+            hdg.innerHTML = "<h1>Test 1</h1>";
+            var s = 'Toy,<input type="text" id="toy"/>' +
+                '\nQuantity,<input type ="text" id="quantity"/>' +
+                '\nPrice,<input type="text" id="price"' +
+                '\n,<input type="button" value="Calculate" ' +
+                'onclick="calc()"/>';
+
+            var input = document.getElementById("input");
+            input.innerHTML = "<h2>Enter Toy, Price and Quantity" +
+                createTable(s);
+        }
+
+
+    </script>
+
+    <style>
+        
+
+        body {
+            background-color: #111;
+            color: #ffc;
+            font-family: sans-serif;
+            text-align:center;
+        }
+    </style>
+
+
+</head>
+<body onload="init()">
+    <div id="hdg">&nbsp;</div>
+    <table style="margin-top:40px">
+        <tr>
+            <td valign="top"><div id="input"></div></td>
+            <td halign="center"><div id="input"></div></td>
+            <td>&nbsp; &nbsp; </td>
+            <td>
+                <div style="width:300px; height:380px; border-left: 1px solid white; padding-left:1em" id="output"> </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
