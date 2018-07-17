@@ -1,0 +1,145 @@
+<html>
+<head>
+    <title>Test 1</title>
+    <script>
+
+    String.prototype.format = function () {
+      var args = arguments;
+      return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
+        if (arguments[2] === undefined)
+          return args[number] === undefined ? '{' + number + '}' : args[number]
+        ;
+        var ch = arguments[3].charCodeAt(0);
+        var n = Number(arguments[4]);
+        if (ch == 102)
+          return Number(args[number]).toFixed(index);
+
+        return args[number].toLocaleString("en-US",{
+             style: "currency",
+             currency: "USD",
+             minimumFractionDigits: n,
+             maximumFractionDigits: n
+           });
+       });
+    };
+
+    function createTable(str, sep) {
+      if (sep===undefined) sep=',';
+      var s = "<table>";
+      var data = str.split("\n");
+      var aligns = ['"center"', '"right"'];
+      for (var i = 0; i < data.length; i++) {
+        var data2 = data[i].split(sep);
+        s += "<tr>";
+        for (var j = 0; j < data2.length; j++) {
+          s += "<td";
+          if (data2[j].charAt(0) == '%') {
+            var ch = data2[j].charAt(1);
+            s += " align=" + aligns[ch];
+            j++;
+          }
+          s += ">" + data2[j] + "</td>";
+        }
+        s += "</tr>";
+      }
+      return s + "</table>";
+        }
+        function change() {
+            var label = document.getElementById("label");
+            var buttons = document.getElementsByName("g");
+
+            if (buttons[1].checked) {
+                label.innerHTML = "Deposit";
+                return;
+            }
+            label.innerHTML = "Payment";
+        }
+        function calc() {
+            var balance = Number(document.getElementById('balance').value);
+            var rate = Number(document.getElementById('rate').value);
+            var years = Number(document.getElementById('years').value);
+            var depositel = Number(document.getElementById('deposit').value);
+            var buttons = document.getElementsByName("g");
+            var accumulate = document.getElementById("accumulate");
+
+            // In JS, buttons is going to be an array
+            // an array just means more than it is one element
+
+            // Objects always use braces var obj = {name:"Ram", age:12};
+            // Arrays always use brackets var x = [1,2] or var g = ["ram","abc"];
+
+            var s = "Year,Balance";
+            var x = 0;
+            rate = rate / 100;
+            var payment = (balance - deposit) * rate * Math.pow(1 + rate, years) /
+                (Math.pow(1 + rate, years) - 1);
+            var output = document.getElementById("output");
+            depositel.value = (P / 12).toFixed(2);
+
+            if (buttons[1].checked) {
+                while (x <= years) {
+                    s += "\n%0," + x + ",%1,$" + balance.toFixed(2);
+                    //accumulate = depositel * (1 + rate) * math.pow(years);
+                    balance = (1 + rate) * balance + depositel;
+                    x++;
+                }
+            }
+            else {
+                var A = Math.pow(1 + rate, years);
+                var P = balance * (rate * A) / (A - 1);
+                while (x <= years) {
+                    s += "\n%0," + x + ",%1,$" + balance.toFixed(2);
+                    balance = (1 + rate) * balance - P;
+                    x++;
+                }
+                depositel.value = (P / 12).toFixed(2);
+                var label = document.getElementById("label");
+                label.innerHTML = "Payment";
+            }
+            output.innerHTML = createTable(s);
+        }
+
+        function init() {
+            var hdg = document.getElementById("hdg");
+            hdg.innerHTML = "<h1>Program 6 & 7</h1>";
+            var s = 'Balance,<input type="text" id="balance"/>' +
+                '\nRate,<input type ="text" id="rate"/>' +
+                '\nYears,<input type="text" id="years"/>' +
+                '\n<span id="label">Deposit</span>, <input type="text" id="deposit"/>' +
+                '\n,%1, <input type="button" value="Calculate" ' +
+                'onclick="calc()"/>' +
+                '\n<input type="radio" name="g" onchange="change()">Loan</input>,' +
+                '<input type="radio" name="g" checked onchange="change()">Savings</input>';
+        
+
+            var input = document.getElementById("input");
+            input.innerHTML = "<h2>Enter balance, rate, years & deposit</h2>" +
+                createTable(s);
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #111;
+            color: #ffc;
+            font-family: sans-serif;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body onload="init()">
+    <div id="hdg">&nbsp;</div>
+    <table style="margin-top:40px">
+        <tr>
+            <td valign="top"><div id="input"></div></td>
+            <td halign="center"><div id="input"></div></td>
+            <td>&nbsp; &nbsp; </td>
+            <td>
+                <div style="width:300px; height:380px; border-left: 1px solid white; padding-left:1em" id="output"> </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
