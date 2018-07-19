@@ -1,0 +1,144 @@
+<html>
+<head>
+    <title>Program 7</title>
+    <script>
+
+        String.prototype.format = function () {
+            var args = arguments;
+            return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
+                if (arguments[2] === undefined)
+                    return args[number] === undefined ? '{' + number + '}' : args[number]
+                        ;
+                var ch = arguments[3].charCodeAt(0);
+                var n = Number(arguments[4]);
+                if (ch == 102)
+                    return Number(args[number]).toFixed(index);
+
+                return args[number].toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: n,
+                    maximumFractionDigits: n
+                });
+
+            });
+
+        };
+
+
+        function createTable(str, sep) {
+            if (sep === undefined) sep = ',';
+            var s = "<table>";
+            var data = str.split("\n");
+            var aligns = ['"center"', '"right"'];
+            for (var i = 0; i < data.length; i++) {
+                var data2 = data[i].split(sep);
+                s += "<tr>";
+                for (var j = 0; j < data2.length; j++) {
+                    s += "<td";
+                    if (data2[j].charAt(0) == '%') {
+                        var ch = data2[j].charAt(1);
+                        s += " align=" + aligns[ch];
+                        j++;
+                    }
+                    s += ">" + data2[j] + "</td>";
+                }
+                s += "</tr>";
+            }
+            return s + "</table>";
+        }
+
+        function listAsIs() {
+            var text = document.getElementById("txt").value;
+            var s = text.split(" ");
+            var s2 = "Income:\n$";
+            s2 += s.join("\n$");
+            var output = document.getElementById("output");
+            output.innerHTML = createTable(s2) +
+                "Avg: $" + getAverage(s).toFixed(2) +
+                "<br>Hi: $" + getHighest(s) +
+                "<br>Make Money!! Make Money!!" +
+                "<br>Low: $:" + getLowest(s);
+        }
+
+        function listByIncome() {
+            var text = document.getElementById("txt").value;
+            var s = text.split(" ");
+
+            s.sort(function (a, b) {
+                if (Number(a) > Number(b)) return -1;
+                if (Number(a) < Number(b)) return 1;
+                return 0;
+            });
+
+            var s2 = "Income:\n$";
+            s2 += s.join("\n$");
+            var output = document.getElementById("output");
+            output.innerHTML = createTable(s2) +
+                "Avg: $" + getAverage(s).toFixed(2) +
+                "<br>Hi: $" + getHighest(s) +
+                "<br>Make Money!! Make Money!!" +
+                "<br>Low: $:" + getLowest(s);
+        }
+        // s will be an array of numbers
+        function getAverage(s) {
+            var total = 0;
+            for (var i = 0; i<s.length; i++){
+                total += Number(s[i]);
+            }
+            return total / s.length;
+        }
+        function getHighest(s) {
+            var hi = Number(s[0]);
+            for (var i = 1; i < s.length; i++)
+                if (Number(s[i]) > hi) hi = Number(s[i]);
+            return hi;
+        }
+        function getLowest(s) {
+            var low = Number(s[0]);
+            for (var i = 1; i < s.length; i++)
+                if (Number(s[i]) < low) low = Number(s[i]);
+            return low;
+        }
+          
+
+        function init() {
+            var hdg = document.getElementById("hdg");
+            hdg.innerHTML = "<h1>Program 7</h1>";
+            var input = document.getElementById("input");
+            var s = "Enter 1 or more income<br>" +
+                '<input type="text" id="txt"/><br/>' +
+                '<input type="button" value="List As Entered" ' +
+                'onclick="listAsIs()" /><br>' +
+                '<input type="button" value="List By Income"' + 'onclick="listByIncome()" />' 
+               ;
+            input.innerHTML = s;
+        }
+    </script>
+
+    <style>
+
+
+        body {
+            background-color: #111;
+            color: #ffc;
+            font-family: sans-serif;
+        }
+    </style>
+
+
+</head>
+<body onload="init()">
+    <div id="hdg">&nbsp;</div>
+    <table style="margin-top:40px">
+        <tr>
+            <td valign="top"><div id="input"></div></td>
+            <td>&nbsp; &nbsp; </td>
+            <td>
+                <div style="width:300px; height:380px; border-left: 1px solid white; padding-left:1em" id="output"> </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
