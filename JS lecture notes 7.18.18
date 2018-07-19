@@ -1,0 +1,98 @@
+<html>
+<head>
+    <title>JS Lecture Notes</title>
+    <script>
+
+    String.prototype.format = function () {
+      var args = arguments;
+      return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
+        if (arguments[2] === undefined)
+          return args[number] === undefined ? '{' + number + '}' : args[number]
+        ;
+        var ch = arguments[3].charCodeAt(0);
+        var n = Number(arguments[4]);
+        if (ch == 102)
+          return Number(args[number]).toFixed(index);
+
+        return args[number].toLocaleString("en-US",{
+             style: "currency",
+             currency: "USD",
+             minimumFractionDigits: n,
+             maximumFractionDigits: n
+           });
+
+      });
+
+    };
+
+    function createTable(str, sep) {
+      if (sep===undefined) sep=',';
+      var s = "<table>";
+      var data = str.split("\n");
+      var aligns = ['"center"', '"right"'];
+      for (var i = 0; i < data.length; i++) {
+        var data2 = data[i].split(sep);
+        s += "<tr>";
+        for (var j = 0; j < data2.length; j++) {
+          s += "<td";
+          if (data2[j].charAt(0) == '%') {
+            var ch = data2[j].charAt(1);
+            s += " align=" + aligns[ch];
+            j++;
+          }
+          s += ">" + data2[j] + "</td>";
+        }
+        s += "</tr>";
+      }
+      return s + "</table>";
+    }
+
+    function init(){
+
+        //var g =[1, 5, 7, 9, 14]
+        //var g = "this is an example".split(" ");
+        //var g = "Ram Sam Joe Mary".split(" ");
+        //var g = "1000 4000 600 12000".split(" ");
+        //    g.sort(function (a, b) {
+        //        if (Number(a) > Number(b)) return 1;
+        //        if (Number(a) < Number(b)) return -1;
+        //        return 0
+        //    });
+        var s = "thisisaslongstring";
+            var output = document.getElementById("output");
+        //    g.pop();
+        //    g.push("Jim");
+        //    g.sort();
+        //    output.innerHTML = g.join("<br>");
+        //    output.innerHTML = g.join();
+        //    output.innerHTML = 's has length ' + s.length + "<br>" + s.substr(4,7);
+        //    output.innerHTML = 's has length ' + s.length + "<br>" + s.indexOf('slong');  : Output : 7
+        //    output.innerHTML = 's has length ' + s.length + "<br>" + s.indexOf('abc'); : Output: -1
+        //    output.innerHTML = 's has length ' + s.length + "<br>" + s.lastIndexOf('i'); : Output: 15
+}               
+    </script>
+
+    <style>
+        body {
+            background-color: #111;
+            color: #ffc;
+            font-family: sans-serif;
+        }
+    </style>
+
+
+</head>
+<body onload="init()">
+    <div id="hdg">&nbsp;</div>
+    <table style="margin-top:40px">
+        <tr>
+            <td valign="top"><div id="input"></div></td>
+            <td>&nbsp; &nbsp; </td>
+            <td>
+                <div style="width:300px; height:380px; border-left: 1px solid white; padding-left:1em" id="output"> </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
