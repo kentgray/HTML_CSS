@@ -1,196 +1,131 @@
 <html>
 <head>
-    <title>Program 8</title>
+    <title>Test 1</title>
     <script>
 
-        String.prototype.format = function () {
-            var args = arguments;
-            return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
-                if (arguments[2] === undefined)
-                    return args[number] === undefined ? '{' + number + '}' : args[number]
-                        ;
-                var ch = arguments[3].charCodeAt(0);
-                var n = Number(arguments[4]);
-                if (ch == 102)
-                    return Number(args[number]).toFixed(index);
+    String.prototype.format = function () {
+      var args = arguments;
+      return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
+        if (arguments[2] === undefined)
+          return args[number] === undefined ? '{' + number + '}' : args[number]
+        ;
+        var ch = arguments[3].charCodeAt(0);
+        var n = Number(arguments[4]);
+        if (ch == 102)
+          return Number(args[number]).toFixed(index);
 
-                return args[number].toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: n,
-                    maximumFractionDigits: n
-                });
-            });
-        };
+        return args[number].toLocaleString("en-US",{
+             style: "currency",
+             currency: "USD",
+             minimumFractionDigits: n,
+             maximumFractionDigits: n
+           });
+       });
+    };
 
-
-        function createTable(str, sep) {
-            if (sep === undefined) sep = ',';
-            var s = "<table>";
-            var data = str.split("\n");
-            var aligns = ['"center"', '"right"'];
-            for (var i = 0; i < data.length; i++) {
-                var data2 = data[i].split(sep);
-                s += "<tr>";
-                for (var j = 0; j < data2.length; j++) {
-                    s += "<td";
-                    if (data2[j].charAt(0) == '%') {
-                        var ch = data2[j].charAt(1);
-                        s += " align=" + aligns[ch];
-                        j++;
-                    }
-                    s += ">" + data2[j] + "</td>";
-                }
-                s += "</tr>";
-            }
-            return s + "</table>";
+    function createTable(str, sep) {
+      if (sep===undefined) sep=',';
+      var s = "<table>";
+      var data = str.split("\n");
+      var aligns = ['"center"', '"right"'];
+      for (var i = 0; i < data.length; i++) {
+        var data2 = data[i].split(sep);
+        s += "<tr>";
+        for (var j = 0; j < data2.length; j++) {
+          s += "<td";
+          if (data2[j].charAt(0) == '%') {
+            var ch = data2[j].charAt(1);
+            s += " align=" + aligns[ch];
+            j++;
+          }
+          s += ">" + data2[j] + "</td>";
         }
+        s += "</tr>";
+      }
+      return s + "</table>";
+        }
+        function change() {
+            var label = document.getElementById("label");
+            var buttons = document.getElementsByName("g");
 
-        function listEmployees(g) {
-            var output = document.getElementById("output");
-            var txt = document.getElementById("txt").value;
-            var data = txt.trim().split(/\s+/);
-            var emps = [];
-            for (var i = 0; i < data.length; i += 2) {
-                var e = {};
-                e.Name = data[i];
-                e.Income = Number(data[i+1]);                
-   //             e.push(data[i]);
-   //             e.push(data[i + 1]);
-                emps.push(e);
+            if (buttons[1].checked) {
+                label.innerHTML = "Deposit";
+                return;
             }
-            if (g) emps.sort(g);
-            var s = "Name,Income";
-            for (var i = 0; i < emps.length; i++)
-                s += "\n" + emps[i].Name + ",%1,$" + emps[i].Income;
+            label.innerHTML = "Payment";
+        }
+        function calc() {
+            var balance = Number(document.getElementById('balance').value);
+            var rate = Number(document.getElementById('rate').value);
+            var years = Number(document.getElementById('years').value);
+            var depositel = Number(document.getElementById('deposit').value);
+            var buttons = document.getElementsByName("g");
+            var accumulate = document.getElementById("accumulate");
 
-            s += "\nAvg:,%1, $" + getAverage(emps).toFixed(0) +
-                "<br>Don't be Average son."
-                "<br>Hi: $" + getHighest(emps) +
-                "<br>Make Money!! Make Money!!" +
-                "<br>Low: $:" + getLowest(emps);
+            // In JS, buttons is going to be an array
+            // an array just means more than it is one element
+
+            // Objects always use braces var obj = {name:"Ram", age:12};
+            // Arrays always use brackets var x = [1,2] or var g = ["ram","abc"];
+
+            var s = "Year,Balance";
+            var x = 0;
+            rate = rate / 100;
+            var payment = (balance - deposit) * rate * Math.pow(1 + rate, years) /
+                (Math.pow(1 + rate, years) - 1);
+            var output = document.getElementById("output");
+            depositel.value = (P / 12).toFixed(2);
+
+            if (buttons[1].checked) {
+                while (x <= years) {
+                    s += "\n%0," + x + ",%1,$" + balance.toFixed(2);
+                    //accumulate = depositel * (1 + rate) * math.pow(years);
+                    balance = (1 + rate) * balance + depositel;
+                    x++;
+                }
+            }
+            else {
+                var A = Math.pow(1 + rate, years);
+                var P = balance * (rate * A) / (A - 1);
+                while (x <= years) {
+                    s += "\n%0," + x + ",%1,$" + balance.toFixed(2);
+                    balance = (1 + rate) * balance - P;
+                    x++;
+                }
+                depositel.value = (P / 12).toFixed(2);
+                var label = document.getElementById("label");
+                label.innerHTML = "Payment";
+            }
             output.innerHTML = createTable(s);
         }
 
-
-        function listAsIs() {
-            listEmployees();
-            //var output = document.getElementById("output");
-            //var txt = document.getElementById("txt").value;
-            //var data = txt.trim().split(/\s+/);
-            //var emps = [];
-            //for (var i = 0; i < data.length; i += 2) {
-            //    var e = [];
-            //    e.push(data[i]);
-            //    e.push(data[i + 1]);
-            //    emps.push(e);
-            //}
-            //var s = "Name,Income";
-            //for (var i = 0; i < emps.length; i++)
-            //    s += "\n" + emps[i][0] + ",%1,$" + emps[i][1];
-
-            //s += "\nAvg:,%1, $" + getAverage(emps).toFixed(0) +
-            //    "<br>Don't be Average son." ;
-            //output.innerHTML = createTable(s);
-        }
-
-        function listByIncome() {
-            //var output = document.getElementById("output");
-            //var txt = document.getElementById("txt").value;
-            //var data = txt.trim().split(/\s+/);
-            //var emps = [];
-            //for (var i = 0; i < data.length; i += 2) {
-            //    var e = [];
-            //    e.push(data[i]);
-            //    e.push(data[i + 1]);
-            //    emps.push(e);
-            //}
-            listEmployees(function (a, b) {
-                if (Number(a.Income) > Number(b.Income)) return -1;
-                if (Number(a.Income) < Number(b.Income)) return 1;
-                return 0;
-                });
-
-            //var s = "Name,Income";
-            //for (var i = 0; i < emps.length; i++)
-            //    s += "\n" + emps[i][0] + ",%1,$" + emps[i][1];
-
-            //s += "\nAvg:,%1, $" + getAverage(emps).toFixed(0) +
-            //    "<br>Don't be Average son.";
-            //output.innerHTML = createTable(s);
-        }
-
-        function listByName() {
-            //var output = document.getElementById("output");
-            //var txt = document.getElementById("txt").value;
-            //var data = txt.trim().split(/\s+/);
-            //var emps = [];
-            //for (var i = 0; i < data.length; i += 2) {
-            //    var e = [];
-            //    e.push(data[i]);
-            //    e.push(data[i + 1]);
-            //    emps.push(e);
-
-            listEmployees(function (a, b) {
-                return a.Name.localeCompare(b.Name);
-            });
-
-            //var s = "Name,Income";
-            //for (var i = 0; i < emps.length; i++)
-            //    s += "\n" + emps[i][0] + ",%1,$" + emps[i][1];
-
-            //s += "\nAvg:,%1, $" + getAverage(emps).toFixed(0) +
-            //    "<br>Don't be Average son.";
-            //output.innerHTML = createTable(s);
-        }
-        function getAverage(emps) {
-            var total = 0;
-            for (var i = 0; i < emps.length; i++) {
-                total += Number(emps[i].Income);
-            }
-            return total / emps.length;
-        }
-        function getHighest(emps) {
-            var hi = Number(emps.Name);
-            for (var i = 1; i < emps.length; i++)
-                if (Number(emps[i]) > hi) hi = Number(emps[i]);
-            return hi;
-        }
-        function getLowest(emps) {
-            var low = Number(emps.Name);
-            for (var i = 1; i < emps.length; i++)
-                if (Number(emps[i]) < low) low = Number(emps[i]);
-            return low;
-        }
-
-
         function init() {
             var hdg = document.getElementById("hdg");
-            hdg.innerHTML = "<h1>Program 8</h1>";
+            hdg.innerHTML = "<h1>Program 6 & 7</h1>";
+            var s = 'Balance,<input type="text" id="balance"/>' +
+                '\nRate,<input type ="text" id="rate"/>' +
+                '\nYears,<input type="text" id="years"/>' +
+                '\n<span id="label">Deposit</span>, <input type="text" id="deposit"/>' +
+                '\n,%1, <input type="button" value="Calculate" ' +
+                'onclick="calc()"/>' +
+                '\n<input type="radio" name="g" onchange="change()">Loan</input>,' +
+                '<input type="radio" name="g" checked onchange="change()">Savings</input>';
+
+
             var input = document.getElementById("input");
-            var s = "Enter 1 or more employees<br>" +
-                '<input type="text" style="Width:300px"' +
-                ' value="Ram 10000 Joe 14000 Sam 12000 Ace 9000" id="txt"/><br />' +
-                '<input type="button" value="List As Entered" ' +
-                ' onclick="listAsIs()" /><br>' +
-                '<input type="button" value="List By Name  " ' +
-                ' onclick="listByName()" /><br>' +
-                '<input type="button" value="List By Income"' +
-                ' onclick="listByIncome()" />';
-            input.innerHTML = s;
+            input.innerHTML = "<h2>Enter balance, rate, years & deposit</h2>" +
+                createTable(s);
         }
     </script>
 
     <style>
-
-
         body {
             background-color: #111;
             color: #ffc;
             font-family: sans-serif;
+            text-align: center;
         }
     </style>
-
 
 </head>
 <body onload="init()">
@@ -198,6 +133,7 @@
     <table style="margin-top:40px">
         <tr>
             <td valign="top"><div id="input"></div></td>
+            <td halign="center"><div id="input"></div></td>
             <td>&nbsp; &nbsp; </td>
             <td>
                 <div style="width:300px; height:380px; border-left: 1px solid white; padding-left:1em" id="output"> </div>
