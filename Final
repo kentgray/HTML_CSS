@@ -1,0 +1,128 @@
+<html>
+<head>
+    <title>Toy Orders</title>
+    
+    <script>
+
+String.prototype.format = function () {
+            var args = arguments;
+            return this.replace(/{(\d+)(:(c|f)(\d))?}/g, function (match, number) {
+                if (arguments[2] === undefined)
+                    return args[number] === undefined ? '{' + number + '}' : args[number]
+                        ;
+                var ch = arguments[3].charCodeAt(0);
+                var n = Number(arguments[4]);
+                if (ch == 102)
+                    return Number(args[number]).toFixed(index);
+
+                return args[number].toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: n,
+                    maximumFractionDigits: n
+                });
+            });
+};
+
+
+function createTable(str, sep) {
+            if (sep === undefined) sep = ',';
+            var s = "<table>";
+            var data = str.split("\n");
+            var aligns = ['"center"', '"right"'];
+            for (var i = 0; i < data.length; i++) {
+                var data2 = data[i].split(sep);
+                s += "<tr>";
+                for (var j = 0; j < data2.length; j++) {
+                    s += "<td";
+                    if (data2[j].charAt(0) == '%') {
+                        var ch = data2[j].charAt(1);
+                        s += " align=" + aligns[ch];
+                        j++;
+                    }
+                    s += ">" + data2[j] + "</td>";
+                }
+                s += "</tr>";
+            }
+            return s + "</table>";
+}
+
+function listToys(g) {
+            var output = document.getElementById("output");
+            var txt = document.getElementById("txt").value;
+            var data = txt.trim().split(/\s+/);
+            var toys = [];
+            for (var i = 0; i < data.length; i += 3) {
+                var t = {};
+                t.Name = data[i];
+                t.Quantity = Number(data[i + 1]);
+                t.Price = Number(data[i + 2]);
+                toys.push(t);
+            }
+            if (g) toys.sort(g);
+            var s = "Name,Quantity,Price";
+            for (var i = 0; i < toys.length; i++)
+                s += "\n" + toys[i].Name + ",%1," + toys[i].Quantity + ",%1,$" + toys[i].Price;
+            s += "\nTotal:,%2, $" + getTotal(toys).toFixed(0);
+            output.innerHTML = createTable(s);
+}
+
+function listOriginal() {
+    listToys();
+}
+
+function listAlpha() {
+            listToys(function (a, b) {
+                return a.Name.localeCompare(b.Name);
+            });
+        }
+
+function getTotal(toys) {
+    var total = 0;
+    for (var i = 0; i < toys.length; i++) {
+        total += Number(toys[i].Quantity * toys[i].Price);
+    }
+    return total;
+}
+    
+
+function init() {
+    var hdg = document.getElementById("hdg");
+    hdg.innerHTML = "<h1>Toy Orders</h1>";
+    var input = document.getElementById("input");
+    var s = "Enter 1 or more toys listing name, quantity and price<br>" +
+        '<input type="text" style="Width:300px"' +
+        ' value="Ball 200 3 Box 100 5 Zebra 50 10 Plane 100 20" id="txt"/><br />' +
+        '<input type="button" value="Original" ' +
+        ' onclick="listOriginal()" /><br>' +
+        '<input type="button" value="List Alphabetically  " ' +
+        ' onclick="listAlpha()" />';
+    input.innerHTML = s;
+}
+    </script>
+    <style>
+
+
+        body {
+            background-color: #111;
+            color: #ffc;
+            font-family: sans-serif;
+        }
+    </style>
+
+
+</head>
+<body onload="init()">
+    <div id="hdg">&nbsp;</div>
+    <table style="margin-top:40px">
+        <tr>
+            <td valign="top"><div id="input"></div></td>
+            <td>&nbsp; &nbsp; </td>
+            <td>
+                <div style="width:300px; height:380px; border-left: 1px solid white; padding-left:1em" id="output"> </div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
